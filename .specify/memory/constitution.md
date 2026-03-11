@@ -1,12 +1,12 @@
 # proxy Constitution
 
-> **Version:** 1.0.0
-> **Ratified:** 2026-03-04
+> **Version:** 2.0.0
+> **Ratified:** 2026-03-10
 > **Status:** Active
 > **Inherits:** [crunchtools/constitution](https://github.com/crunchtools/constitution) v1.0.0
 > **Profile:** Container Image
 
-Lean reverse proxy image — Apache httpd + mod_ssl on UBI 10. Runs with `--network=host` on Lotor as the single entry point for all containerized services. No database, no PHP, no application runtime.
+Lean reverse proxy image — mod_ssl on ubi10-httpd. Inherits Apache httpd from ubi10-httpd and troubleshooting tools from ubi10-core. Runs with `--network=host` on Lotor as the single entry point for all containerized services. No database, no PHP, no application runtime.
 
 ---
 
@@ -20,7 +20,7 @@ Follow Semantic Versioning 2.0.0. MAJOR/MINOR/PATCH.
 
 ## Base Image
 
-`registry.access.redhat.com/ubi10/ubi-init:latest` — systemd-based for httpd service management.
+`quay.io/crunchtools/ubi10-httpd:latest` — inherits httpd (enabled), troubleshooting tools, and systemd hardening.
 
 ## Registry
 
@@ -28,23 +28,24 @@ Published to `quay.io/crunchtools/proxy`.
 
 ## RHSM Registration
 
-Uses build-arg based subscription-manager registration to access RHEL repos for mod_ssl.
+Not required. mod_ssl is available in UBI repos.
 
 ## Containerfile Conventions
 
 - Uses `Containerfile` (not Dockerfile)
 - Required LABELs: `maintainer`, `description`
 - `dnf install -y --nodocs` followed by `dnf clean all`
-- `subscription-manager unregister` after package installation
-- systemd service enabled: httpd
-- systemd services masked: systemd-remount-fs, systemd-update-done, systemd-udev-trigger
+- No RHSM registration needed
 - Default `ssl.conf` removed — vhost config bind-mounted at runtime
-- `STOPSIGNAL SIGRTMIN+3` for proper systemd shutdown
-- `ENTRYPOINT ["/sbin/init"]`
+- Inherits from parent chain: httpd (enabled), systemd-remount-fs/systemd-update-done/systemd-udev-trigger (masked)
+- Inherits `STOPSIGNAL SIGRTMIN+3` and `ENTRYPOINT ["/sbin/init"]` from ubi10-core
 
 ## Packages Installed
 
-httpd, mod_ssl
+mod_ssl
+
+Inherited from ubi10-httpd: httpd
+Inherited from ubi10-core: iputils, bind-utils, net-tools, less, cronie, procps-ng, diffutils
 
 ## Runtime
 
@@ -61,4 +62,5 @@ httpd, mod_ssl
 ## Quality Gates
 
 1. Build — CI builds the Containerfile successfully
-2. Weekly rebuild — cron job picks up base image updates every Monday 6 AM UTC
+2. Push — image published after successful build
+3. Weekly rebuild — cron job picks up base image updates every Monday 4:30 AM UTC

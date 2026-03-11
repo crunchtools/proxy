@@ -3,10 +3,11 @@ name: Build and Push Container Image
 on:
   push:
     branches: [main, master]
+  repository_dispatch:
+    types: [parent-image-updated]
   workflow_dispatch:
   schedule:
-    # Rebuild weekly to pick up base image updates
-    - cron: '0 6 * * 1'
+    - cron: '30 4 * * 1'
 
 env:
   REGISTRY: quay.io
@@ -50,9 +51,6 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          secrets: |
-            activation_key=${{ secrets.RHSM_ACTIVATION_KEY }}
-            org_id=${{ secrets.RHSM_ORG_ID }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
