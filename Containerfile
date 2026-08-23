@@ -16,6 +16,7 @@ RUN --mount=type=secret,id=activation_key \
 RUN dnf install -y --nodocs \
     httpd \
     mod_ssl \
+    rsyslog \
     && dnf clean all
 
 # Unregister to avoid leaking entitlements in the image
@@ -24,8 +25,13 @@ RUN subscription-manager unregister 2>/dev/null || true
 # Remove default ssl.conf — vhost config is bind-mounted at runtime
 RUN rm -f /etc/httpd/conf.d/ssl.conf
 
+# Central log forwarding (constitution XIII). proxy builds on ubi10-init rather
+# than ubi10-core, so it does not inherit ubi10-core's forwarding drop-in.
+COPY config/rsyslog-forward.conf /etc/rsyslog.d/00-crunchtools-forward.conf
+COPY config/rsyslog-restart.conf /etc/systemd/system/rsyslog.service.d/restart.conf
+
 # Enable httpd
-RUN systemctl enable httpd
+RUN systemctl enable httpd rsyslog
 
 # Disable unnecessary systemd services for container
 RUN systemctl mask systemd-remount-fs.service \
