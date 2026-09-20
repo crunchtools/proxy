@@ -6,11 +6,20 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
-### Added
-- `mcp.crunchtools.com` vhost proxying the Trentina MCP gateway
-  (`127.0.0.1:8019`), scoped to the single `gemini-app` profile path for the
-  Gemini Apps custom connector. All other gateway profiles remain
-  localhost-only.
+### Removed
+- `proxy.crunchtools.com.conf` — a duplicate of the live vhost config. The image
+  never used it: the Containerfile removes the stock `ssl.conf` and the running
+  container bind-mounts the real config from
+  `/srv/proxy.crunchtools.com/config/`, tracked in the `lotor-srv` repo. Keeping
+  a second copy here let the two diverge silently — this repo's copy was four
+  vhosts behind production and overwriting the host file from it caused a
+  gateway outage on 2026-09-20. One deployed config file, one git home. See
+  RT #1498 (drift check) for the detection follow-up.
+
+### Note
+- The `mcp.crunchtools.com` vhost (Trentina gateway, scoped to the `gemini-app`
+  profile path for the Gemini Apps custom connector) is deployed via the
+  bind-mounted `/srv` config, not this repo.
 
 ## [1.0.0] - 2026-09-20
 
