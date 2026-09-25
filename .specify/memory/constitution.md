@@ -1,9 +1,9 @@
 # proxy Constitution
 
-> **Version:** 2.0.0
+> **Version:** 2.0.1
 > **Ratified:** 2026-03-10
 > **Status:** Active
-> **Inherits:** [crunchtools/constitution](https://github.com/crunchtools/constitution) v1.0.0
+> **Inherits:** [crunchtools/constitution](https://github.com/crunchtools/constitution) v1.17.0
 > **Profile:** Container Image
 
 Lean reverse proxy image — mod_ssl on ubi10-httpd. Inherits Apache httpd from ubi10-httpd and troubleshooting tools from ubi10-core. Runs with `--network=host` on Lotor as the single entry point for all containerized services. No database, no PHP, no application runtime.
