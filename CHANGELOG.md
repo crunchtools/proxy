@@ -6,6 +6,12 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+- Constitution is now a v1.18.0 manifest: fleet and profile rules apply by
+  reference, and only this repo's specifics are kept.
+- Constitution validation is pinned via `constitution.yml`.
+- Dependabot auto-merges GitHub Actions minor and patch updates.
+
 ### Removed
 - `proxy.crunchtools.com.conf` — a duplicate of the live vhost config. The image
   never used it: the Containerfile removes the stock `ssl.conf` and the running
