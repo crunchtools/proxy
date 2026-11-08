@@ -6,6 +6,8 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-08
+
 ### Changed
 - Constitution is now a v1.18.0 manifest: fleet and profile rules apply by
   reference, and only this repo's specifics are kept.
