@@ -1,8 +1,8 @@
 # proxy Constitution
 
-> **Version:** 2.1.0
+> **Version:** 2.1.1
 > **Ratified:** 2026-03-10
-> **Amended:** 2026-10-02
+> **Amended:** 2026-11-11
 > **Status:** Active
 > **Inherits:** [crunchtools/constitution](https://github.com/crunchtools/constitution) v1.39.1
 > **Profile:** Container Image
@@ -41,7 +41,8 @@ registration.
 
 ## Test Coverage
 
-CI builds the image and runs a Trivy scan; the repo has no smoke test yet.
+CI builds the image; the repo has no smoke test yet. Vulnerability scanning is
+not a build step: published images are scanned on a schedule by the fleet CVE check (grype + Nagios), which pages on a new fixable Critical (constitution 1.40.0, RT #1551).
 
 ## History
 
@@ -51,3 +52,4 @@ CI builds the image and runs a Trivy scan; the repo has no smoke test yet.
 | 2.0.0 | 2026-03-10 | Rebased onto ubi10-httpd; RHSM removed |
 | 2.0.1 | 2026-09-25 | Gatehouse review, triage and pre-commit gates |
 | 2.1.0 | 2026-10-02 | Manifest under constitution v1.18.0: profile restatement removed, image specifics kept |
+| 2.1.1 | 2026-11-11 | Test coverage no longer claims a Trivy scan: the per-build scan is retired (constitution 1.40.0) and published images are scanned by the fleet CVE check (RT #1551) |
